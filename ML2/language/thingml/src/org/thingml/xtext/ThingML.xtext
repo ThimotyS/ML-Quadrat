@@ -212,6 +212,14 @@ StateContainer:
 MessageParameter returns MessageParameter:
 	Message | Parameter
 ;
+enum Plots: BOX_PLOT='BOX_PLOT'| HEAT_MAP='HEAT_MAP'| CLASS_IMBALANCE='CLASS_IMBALANCE' 
+    | PAIR_PLOT='PAIR_PLOT'| PRECISION_RECALL='PRECISION_RECALL'| CONFUSION_MATRIX='CONFUSION_MATRIX'
+    | ROC_CURVE='ROC_CURVE'| LEARNING_CURVE='LEARNING_CURVE'| CLUSTERING='CLUSTERING';
+    
+enum Metrics: MSE='MSE' | RMSE='RMSE' | MAE='MAE'
+    | ACCURACY='ACCURACY' | PRECISION='PRECISION'
+    | RECALL='RECALL' | F1_SCORE='F1_SCORE'| R2='R2';
+
 
 DataAnalytics returns DataAnalytics:
 	'data_analytics' name=ID ( annotations+=PlatformAnnotation )* '{'
@@ -230,6 +238,8 @@ DataAnalytics returns DataAnalytics:
 		('blackbox_ml_model' blackbox_ml_model=STRING)?
 		('blackbox_import_algorithm' blackbox_import_algorithm=STRING)?
 		('blackbox_label_encoder' blackbox_label_encoder=STRING)?
+                ('plots' plots+=Plots ("," plots+=Plots)*)?
+                ('metrics' metrics+=Metrics ("," metrics+=Metrics)*)?
 '}';
 
 enum AutoML:
