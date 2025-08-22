@@ -1,5 +1,3 @@
-**Please watch our video here: https://www.youtube.com/watch?v=VAuz25w0a5k**
-
 # ML-Quadrat (ML2)
 Fork of [ML-Quadrat](https://github.com/arminmoin/ML-Quadrat), consolidate their documentation regarding the project.
 
@@ -32,4 +30,5 @@ cd ML2/compilers/registery
 mvn clean install -DskipTests
 ```
 The last command will give you the .jar file location that you can use to compile projects with.
+
 
