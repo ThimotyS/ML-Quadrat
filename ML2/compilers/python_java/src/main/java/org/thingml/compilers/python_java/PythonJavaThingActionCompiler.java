@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.awt.Desktop.Action;
 import java.io.BufferedWriter;
-
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,90 +44,7 @@ import org.thingml.xtext.helpers.AnnotatedElementHelper;
 import org.thingml.xtext.helpers.ConfigurationHelper;
 import org.thingml.xtext.helpers.ThingHelper;
 import org.thingml.xtext.helpers.TyperHelper;
-import org.thingml.xtext.thingML.Activation;
-import org.thingml.xtext.thingML.ArrayInit;
-import org.thingml.xtext.thingML.AutoML;
-import org.thingml.xtext.thingML.ClassifierWithPredictionCertaintyProbabilities;
-import org.thingml.xtext.thingML.Covariance_Type;
-import org.thingml.xtext.thingML.DAPreTrainedPredictAction;
-import org.thingml.xtext.thingML.DAPredictAction;
-import org.thingml.xtext.thingML.DAPreprocessAction;
-import org.thingml.xtext.thingML.DASaveAction;
-import org.thingml.xtext.thingML.DATrainAction;
-import org.thingml.xtext.thingML.DBSCAN;
-import org.thingml.xtext.thingML.DataAnalyticsModelAlgorithm;
-import org.thingml.xtext.thingML.DecisionTreeClassifier;
-import org.thingml.xtext.thingML.DecisionTreeClassifierCriterion;
-import org.thingml.xtext.thingML.DecisionTreeRegressor;
-import org.thingml.xtext.thingML.DecisionTreeRegressorCriterion;
-import org.thingml.xtext.thingML.DecisionTreeSplitter;
-import org.thingml.xtext.thingML.RandomForestClassifier;
-import org.thingml.xtext.thingML.RandomForestClassifierCriterion;
-import org.thingml.xtext.thingML.RandomForestRegressor;
-import org.thingml.xtext.thingML.RandomForestRegressorCriterion;
-import org.thingml.xtext.thingML.NN_MultilayerPerceptron;
-import org.thingml.xtext.thingML.NaiveBayesBernoulli;
-import org.thingml.xtext.thingML.NaiveBayesCategorical;
-import org.thingml.xtext.thingML.NaiveBayesComplement;
-import org.thingml.xtext.thingML.NaiveBayesGaussian;
-import org.thingml.xtext.thingML.NaiveBayesMultinomial;
-import org.thingml.xtext.thingML.Decrement;
-import org.thingml.xtext.thingML.Eigen_Solver;
-import org.thingml.xtext.thingML.EnumLiteralRef;
-import org.thingml.xtext.thingML.Enumeration;
-import org.thingml.xtext.thingML.EnumerationLiteral;
-import org.thingml.xtext.thingML.EqualsExpression;
-import org.thingml.xtext.thingML.ErrorAction;
-import org.thingml.xtext.thingML.EventReference;
-import org.thingml.xtext.thingML.Expression;
-import org.thingml.xtext.thingML.ExternExpression;
-import org.thingml.xtext.thingML.ForAction;
-import org.thingml.xtext.thingML.FunctionCallExpression;
-import org.thingml.xtext.thingML.FunctionCallStatement;
-import org.thingml.xtext.thingML.GaussianMixture;
-import org.thingml.xtext.thingML.Increment;
-import org.thingml.xtext.thingML.Init_Params_Methods;
-import org.thingml.xtext.thingML.IntegerLiteral;
-import org.thingml.xtext.thingML.KMeans;
-import org.thingml.xtext.thingML.KMeans_algorithm_enum;
-import org.thingml.xtext.thingML.KMeans_init_enum;
-import org.thingml.xtext.thingML.KNN_Algorithms;
-import org.thingml.xtext.thingML.LabelPropagation;
-import org.thingml.xtext.thingML.LabelSpreading;
-import org.thingml.xtext.thingML.Label_Propagation_Kernel;
-import org.thingml.xtext.thingML.Labels;
-import org.thingml.xtext.thingML.Laplacian_Embedding_Label_Assign_Strategy;
-import org.thingml.xtext.thingML.Learning_rate_mode;
-import org.thingml.xtext.thingML.LinearClassifierLogisticRegression;
-import org.thingml.xtext.thingML.LinearRegression;
-import org.thingml.xtext.thingML.LocalVariable;
-import org.thingml.xtext.thingML.Loss;
-import org.thingml.xtext.thingML.ML2_ModelAlgorithm;
-import org.thingml.xtext.thingML.Max_features_enum;
-import org.thingml.xtext.thingML.MiniBatchKMeans;
-import org.thingml.xtext.thingML.Multi_class;
-import org.thingml.xtext.thingML.NotEqualsExpression;
-import org.thingml.xtext.thingML.Optimizer;
-import org.thingml.xtext.thingML.Parameter;
-import org.thingml.xtext.thingML.Penalty;
-import org.thingml.xtext.thingML.Preprocess_feature_scaler;
-import org.thingml.xtext.thingML.Preprocess_sample_normalizer;
-import org.thingml.xtext.thingML.PrimitiveType;
-import org.thingml.xtext.thingML.PrintAction;
-import org.thingml.xtext.thingML.Property;
-import org.thingml.xtext.thingML.PropertyReference;
-import org.thingml.xtext.thingML.ReceiveMessage;
-import org.thingml.xtext.thingML.SelfTrainingClassifier;
-import org.thingml.xtext.thingML.Self_Training_Criterion;
-import org.thingml.xtext.thingML.SendAction;
-import org.thingml.xtext.thingML.Sequential;
-import org.thingml.xtext.thingML.SpectralClustering;
-import org.thingml.xtext.thingML.StartSession;
-import org.thingml.xtext.thingML.Thing;
-import org.thingml.xtext.thingML.ThingMLPackage;
-import org.thingml.xtext.thingML.Timestamps;
-import org.thingml.xtext.thingML.Type;
-import org.thingml.xtext.thingML.TypeRef;
+import org.thingml.xtext.thingML.*;
 import org.thingml.xtext.validation.TypeChecker;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -654,7 +571,10 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 	public void generate(DAPreprocessAction action, StringBuilder builder, Context ctx) {
 		Path path = null;
 		path = Paths.get(new File(ctx.getOutputDirectory().getAbsolutePath().toString()).toURI());
-
+    Path pythonPlotsPath = path.resolve("src/python-scripts/plots");
+    File pythonPlotsDirectory = pythonPlotsPath.toFile();
+    pythonPlotsDirectory.mkdirs();
+    
 		String dataset = path.toString() + "tmp_dataset.csv";
 		if (action.getDataAnalytics().getDataset() != null) {
 			dataset = action.getDataAnalytics().getDataset();
@@ -953,7 +873,35 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 					+ "preprocess_y_train.pickle', 'wb') as pickle_file:\n");
 			pythonScriptStringBuilder.append("	pickle.dump(y_train, pickle_file)\n");
+			
+			pythonScriptStringBuilder.append("from sklearn.model_selection import train_test_split \n");
+			
+			pythonScriptStringBuilder.append("x_train, x_test, y_train, y_test = train_test_split(X_train, y_train) \n");
+			
+			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+				+ "preprocess_X_train.pickle', 'wb') as pickle_file:\n");
+			pythonScriptStringBuilder.append("	pickle.dump(x_train, pickle_file)\n");
+			
+			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+				+ "preprocess_X_test.pickle', 'wb') as pickle_file:\n");
+			pythonScriptStringBuilder.append("	pickle.dump(x_test, pickle_file)\n");
+			
+			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+				+ "preprocess_y_train.pickle', 'wb') as pickle_file:\n");
+			pythonScriptStringBuilder.append("	pickle.dump(y_train, pickle_file)\n");
+			
+			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+				+ "preprocess_y_test.pickle', 'wb') as pickle_file:\n");
+			pythonScriptStringBuilder.append("	pickle.dump(y_test, pickle_file)\n");
+			
+			
+		} else {
+			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+				+ "preprocess_X_train.pickle', 'wb') as pickle_file:\n");
+			pythonScriptStringBuilder.append("	pickle.dump(X_train, pickle_file)\n");
 		}
+    generatePreProcessPlots(pythonScriptStringBuilder,path_str,action.getDataAnalytics());
+
 
 		// pythonScriptStringBuilder.append("#********* ML2 *********\n\n");
 		File pythonScriptsDir = new File(path_str + "/python-scripts");
@@ -995,10 +943,8 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		// builder.append("\n//********* ML2 *********\n");
 		generatePythonDATrainScript(path.toString() + "/src", action);
 
-		builder.append("File X_train_pickle = new File(\"" + path.toString()
-				+ "/src/python-scripts/pickles/preprocess_X_train.pickle" + "\");\n");
-		builder.append("File y_train_pickle = new File(\"" + path.toString()
-				+ "/src/python-scripts/pickles/preprocess_y_train.pickle" + "\");\n");
+		builder.append("File X_train_pickle = new File(\"" + path.toString()+ "/src/python-scripts/pickles/preprocess_X_train.pickle" + "\");\n");
+		builder.append("File y_train_pickle = new File(\"" + path.toString()+ "/src/python-scripts/pickles/preprocess_y_train.pickle" + "\");\n");
 		builder.append("if(!X_train_pickle.exists())\n");
 		builder.append("	return;\n");
 
@@ -1086,6 +1032,15 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 			pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 					+ "preprocess_y_train.pickle', 'rb') as pickle_file:\n");
 			pythonScriptStringBuilder.append("    y_train = pickle.load(pickle_file)\n\n");
+	
+	    pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+	    + "preprocess_X_test.pickle', 'rb') as pickle_file:\n");
+	    pythonScriptStringBuilder.append("    X_test = pickle.load(pickle_file)\n\n");
+	    
+	    pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
+	    + "preprocess_y_test.pickle', 'rb') as pickle_file:\n");
+	    pythonScriptStringBuilder.append("    y_test = pickle.load(pickle_file)\n\n");
+			
 		}
 
 		if (action.getDataAnalytics().getLabels() == Labels.ON) {
@@ -1225,7 +1180,8 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 				System.err.println("ERROR: "
 						+ "In the data analytics section of the model, labels must be specified: ON (for supervised ML, i.e., labeled data), OFF (for unsupervised ML, i.e., unlabeled data) or SEMI (for semi-supervised ML, i.e., partially labeled data).\n");
 			}
-
+      generateTrainPlotsMetrics(pythonScriptStringBuilder,path_str,action.getDataAnalytics());
+      generateDAReport(pythonScriptStringBuilder,path_str,action.getDataAnalytics());
 			// pythonScriptStringBuilder.append("#********* ML2 *********\n\n");
 			File pythonScriptsDir = new File(path_str + "/python-scripts");
 			if (!pythonScriptsDir.exists()) {
@@ -4216,11 +4172,11 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		}
 
 		pythonScriptStringBuilder.append("from sklearn.cluster import KMeans\n");
-		pythonScriptStringBuilder.append("k_means_clustering = KMeans(" + params + ")\n");
-		pythonScriptStringBuilder.append("k_means_clustering = k_means_clustering.fit(X_train)\n");
+		pythonScriptStringBuilder.append("model = KMeans(" + params + ")\n");
+		pythonScriptStringBuilder.append("model = model.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_k_means_clustering.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(k_means_clustering, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 	}
 
 	private void generatePythonDATrainScriptMiniBatchKMeans(String dalib, String path_str, DATrainAction action,
@@ -4389,12 +4345,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		}
 
 		pythonScriptStringBuilder.append("from sklearn.cluster import MiniBatchKMeans\n");
-		pythonScriptStringBuilder.append("mini_batch_k_means_clustering = MiniBatchKMeans(" + params + ")\n");
+		pythonScriptStringBuilder.append("model = MiniBatchKMeans(" + params + ")\n");
 		pythonScriptStringBuilder
-				.append("mini_batch_k_means_clustering = mini_batch_k_means_clustering.fit(X_train)\n");
+				.append("model = model.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_mini_batch_k_means_clustering.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(mini_batch_k_means_clustering, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 	}
 
 	private void generatePythonDATrainScriptDBSCAN(String dalib, String path_str, DATrainAction action,
@@ -4514,11 +4470,11 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		}
 
 		pythonScriptStringBuilder.append("from sklearn.cluster import DBSCAN\n");
-		pythonScriptStringBuilder.append("dbscan_clustering = DBSCAN(" + params + ")\n");
-		pythonScriptStringBuilder.append("dbscan_clustering = dbscan_clustering.fit(X_train)\n");
+		pythonScriptStringBuilder.append("model = DBSCAN(" + params + ")\n");
+		pythonScriptStringBuilder.append("model = dbscan_clustering.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_dbscan_clustering.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(dbscan_clustering, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 
 	}
 
@@ -4756,11 +4712,11 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		}
 
 		pythonScriptStringBuilder.append("from sklearn.cluster import SpectralClustering\n");
-		pythonScriptStringBuilder.append("spectral_clustering = SpectralClustering(" + params + ")\n");
-		pythonScriptStringBuilder.append("spectral_clustering = spectral_clustering.fit(X_train)\n");
+		pythonScriptStringBuilder.append("model = SpectralClustering(" + params + ")\n");
+		pythonScriptStringBuilder.append("model = spectral_clustering.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_spectral_clustering.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(spectral_clustering, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 	}
 
 	private void generatePythonDATrainScriptGaussianMixture(String dalib, String path_str, DATrainAction action,
@@ -4948,11 +4904,11 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		}
 
 		pythonScriptStringBuilder.append("from sklearn.mixture import GaussianMixture\n");
-		pythonScriptStringBuilder.append("gaussian_mixture_clustering = GaussianMixture(" + params + ")\n");
-		pythonScriptStringBuilder.append("gaussian_mixture_clustering = gaussian_mixture_clustering.fit(X_train)\n");
+		pythonScriptStringBuilder.append("model = GaussianMixture(" + params + ")\n");
+		pythonScriptStringBuilder.append("model = gaussian_mixture_clustering.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_gaussian_mixture_clustering.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(gaussian_mixture_clustering, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 
 	}
 
@@ -5105,14 +5061,14 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 
 		pythonScriptStringBuilder.append("from sklearn.semi_supervised import SelfTrainingClassifier\n");
 		if (!params.equals(null)) {
-			pythonScriptStringBuilder.append("self_training_model = SelfTrainingClassifier(model, " + params + ")\n");
+			pythonScriptStringBuilder.append("model = SelfTrainingClassifier(model, " + params + ")\n");
 		} else {
-			pythonScriptStringBuilder.append("self_training_model = SelfTrainingClassifier(model)\n");
+			pythonScriptStringBuilder.append("model = SelfTrainingClassifier(model)\n");
 		}
-		pythonScriptStringBuilder.append("self_training_model = self_training_model.fit(X_train)\n");
+		pythonScriptStringBuilder.append("model = self_training_model.fit(X_train)\n");
 		pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"
 				+ "train_model_self_training.pickle', 'wb') as pickle_file:\n");
-		pythonScriptStringBuilder.append("    pickle.dump(self_training_model, pickle_file)\n\n");
+		pythonScriptStringBuilder.append("    pickle.dump(model, pickle_file)\n\n");
 
 	}
 
@@ -5689,7 +5645,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 				builder.append("\"\'\" + Arrays.toString(" + ctx.getVariableName(feature_values_for_prediction.get(i))
 						+ ").replaceAll(\",\",\"\") + \"\'\"");
 			} else {
-				builder.append(ctx.getVariableName(feature_values_for_prediction.get(i)).toString());
+				builder.append("\" + String.valueOf(" + ctx.getVariableName(feature_values_for_prediction.get(i)) + ") + \"");
 			}
 
 			if (i < feature_values_for_prediction.size() - 1) {
@@ -5701,6 +5657,8 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		builder.append("list.add(\"\'\" + prediction_timestamp + \"\'\");\n");
 
 		builder.append("StringBuilder output_string_builder = new StringBuilder();\n");
+		builder.append("List<String> pythonOutput = new ArrayList<>();\n");
+
 		builder.append("try{\n");
 		builder.append("	ProcessBuilder pb = new ProcessBuilder(list);\n");
 		builder.append("	Process p = pb.start();\n");
@@ -5710,133 +5668,126 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 		builder.append("	String s = null;\n");
 		builder.append("	while ((s = stdInput.readLine()) != null) {\n");
 		builder.append("		output_string_builder.append(s);\n");
+		builder.append("		pythonOutput.add(s.trim());\n");
 		builder.append("	}\n");
 		builder.append("} catch(Exception e){System.out.println(e);}\n");
 
-		if (!(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType() instanceof Enumeration)) {
-			if (AnnotatedElementHelper.hasAnnotation(
-					action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(), "java_type")) {
-				if (!action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().isIsArray()) {
+    for (int i = 0; i < action.getDataAnalytics().getPredictionResults().size(); i++) {
+      builder.append("if(!pythonOutput.isEmpty() && " + i +"< pythonOutput.size()){\n");
+	    if (!(action.getDataAnalytics().getPredictionResults().get(i).getTypeRef().getType() instanceof Enumeration)) {
 
-					if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("boolean")) {
-						// boolean
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Boolean.parseBoolean(" + "(output_string_builder.toString());\n");
+	        if (AnnotatedElementHelper.hasAnnotation(
+	                action.getDataAnalytics().getPredictionResults().get(i).getTypeRef().getType(), "java_type")) {
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("char")) {
-						// char
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= " + "output_string_builder.toString();\n");
+	            if (!action.getDataAnalytics().getPredictionResults().get(i).getTypeRef().isIsArray()) {
+	                List<String> da_predict_annotations = AnnotatedElementHelper.annotation(action.getDataAnalytics().getPredictionResults().get(i).getTypeRef().getType(),"java_type");
+	                String annotationHelperOutput = da_predict_annotations.get(da_predict_annotations.size()-1);
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("String")) {
-						// String
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= " + "output_string_builder.toString();\n");
+	                if (annotationHelperOutput.equals("boolean")) {
+	                    // boolean
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("double")) {
-						// double
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Double.valueOf(" + "output_string_builder.toString());\n");
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Boolean.parseBoolean(" + "pythonOutput.get(" + i + ").toString());\n");
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("byte")) {
-						// byte
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Byte.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+	                } else if (annotationHelperOutput.equals("char")) {
+	                    // char
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("short")) {
-						// short
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Short.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= " + "pythonOutput.get(" + i + ").toString();\n");
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("int")) {
-						// int
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Integer.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+	                } else if (annotationHelperOutput.equals("String")) {
+	                    // String
 
-					} else if (AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.equals("long")) {
-						// long
-						builder.append(
-								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Long.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= " + "pythonOutput.get(" + i + ").toString();\n");
 
-					}
+	                } else if (annotationHelperOutput.equals("double")) {
+	                    // double
 
-				} else {
-					builder.append(
-							"String[] arrString = output_string_builder.toString().substring(1,output_string_builder.toString().length()-1).split(\" \");\n");
-					builder.append(AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.toArray()[0] + "[] ");
-					builder.append("arr = new ");
-					builder.append(AnnotatedElementHelper
-							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
-									"java_type")
-							.toArray()[0]);
-					builder.append("[arrString.length];\n");
-					builder.append("for(int i=0; i<arrString.length; i++) {\n");
-					builder.append(
-							"	arr[i] = "
-									+ ctx.firstToUpper(AnnotatedElementHelper
-											.annotation(action.getDataAnalytics().getPredictionResults().get(0)
-													.getTypeRef().getType(), "java_type")
-											.toArray()[0].toString())
-									+ ".parse"
-									+ ctx.firstToUpper(AnnotatedElementHelper.annotation(action.getDataAnalytics()
-											.getPredictionResults().get(0).getTypeRef().getType(), "java_type")
-											.toArray()[0].toString())
-									+ "(arrString[i]);\n");
-					builder.append("}\n");
-					builder.append(
-							ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-									+ "=arr;\n");
-				}
-			} else {
-				if (!action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().isIsArray()) {
-					// TODO
-					builder.append("(Object) (output_string_builder.toString());\n");
-				} else {
-					// TODO
-					builder.append("(Object[]) (output_string_builder.toString());\n");
-				}
-			}
-		}
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Double.valueOf(" + "pythonOutput.get(" + i + ").toString());\n");
 
+	                } else if (annotationHelperOutput.equals("byte")) {
+	                    // byte
+
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Byte.valueOf((int) Math.round(Double.valueOf("
+	                                    + "pythonOutput.get(" + i + ").toString())));\n");
+
+	                } else if (annotationHelperOutput.equals("short")) {
+	                    // short
+
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Short.valueOf((int) Math.round(Double.valueOf("
+	                                    + "pythonOutput.get(" + i + ").toString())));\n");
+
+	                } else if (annotationHelperOutput.equals("int")) {
+	                    // int
+
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Integer.valueOf((int) Math.round(Double.valueOf("
+	                                    + "pythonOutput.get(" + i + ").toString())));\n");
+
+	                } else if (annotationHelperOutput.equals("long")) {
+	                    // long
+
+	                    builder.append(
+	                            ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(i)).toString()
+	                                    + "= Long.valueOf((int) Math.round(Double.valueOf("
+	                                    + "pythonOutput.get(" + i + ").toString())));\n");
+
+	                }
+
+	            } else {
+
+	                builder.append(
+	                        "String[] arrString = pythonOutput.get(" + i + ").toString().substring(1,pythonOutput.get(" + i + ").toString().length()-1).split(\" \");\n");
+	                builder.append(AnnotatedElementHelper
+	                        .annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
+	                                "java_type")
+	                        .toArray()[0] + "[] ");
+	                builder.append("arr = new ");
+	                builder.append(AnnotatedElementHelper
+	                        .annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
+	                                "java_type")
+	                        .toArray()[0]);
+	                builder.append("[arrString.length];\n");
+	                builder.append("for(int i=0; i<arrString.length; i++) {\n");
+	                builder.append(
+	                        "    arr[i] = "
+	                                + ctx.firstToUpper(AnnotatedElementHelper
+	                                        .annotation(action.getDataAnalytics().getPredictionResults().get(0)
+	                                                .getTypeRef().getType(), "java_type")
+	                                        .toArray()[0].toString())
+	                                + ".parse"
+	                                + ctx.firstToUpper(AnnotatedElementHelper.annotation(action.getDataAnalytics()
+	                                        .getPredictionResults().get(0).getTypeRef().getType(), "java_type")
+	                                        .toArray()[0].toString())
+	                                + "(arrString[i]);\n");
+	                builder.append("}\n");
+	                builder.append(
+	                        ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
+	                                + "=arr;\n");
+	            }
+	        } else {
+	            if (!action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().isIsArray()) {
+	                // TODO
+	                builder.append("(Object) (pythonOutput[i].toString());\n");
+	            } else {
+	                // TODO
+	                builder.append("(Object[]) (pythonOutput[i].toString());\n");
+	            }
+	        }
+	    }
+      builder.append("}\n");
+    }
 //		builder.append("//********* ML2 *********\n\n");
 	}
 
@@ -5999,7 +5950,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6032,7 +5988,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6066,7 +6027,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6099,7 +6065,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6132,8 +6103,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
-
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
 									+ " is specified as the library for DA/ML. However, it does not support the chosen model/algorithm for DA/ML: "
@@ -6166,7 +6141,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6234,7 +6214,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6302,7 +6287,12 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 									"			df.insert(i,features[i], pd.Series(feature_values_for_prediction[i]))\n\n");
 
 							// The actual prediction of the DA/ML model
-							pythonScriptStringBuilder.append("	print (model.predict(df).item(0))\n\n");
+					    pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+	            pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	            pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+	            pythonScriptStringBuilder.append("	pred = le.inverse_transform(model.predict(df))\n");
+	            pythonScriptStringBuilder.append("	for prediction in pred:\n");
+	            pythonScriptStringBuilder.append("		print(str(prediction))\n\n");
 
 						} else if (dalib.equals("keras-tensorflow")) {
 							System.err.println("ERROR: " + dalib
@@ -6982,7 +6972,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 						// boolean
 						builder.append(
 								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Boolean.parseBoolean(" + "(output_string_builder.toString());\n");
+										+ "= Boolean.parseBoolean(" + "output_string_builder.toString());\n");
 
 					} else if (AnnotatedElementHelper
 							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
@@ -7018,8 +7008,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 						// byte
 						builder.append(
 								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Byte.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+										+ "= Byte.valueOf((int) Math.round(Double.valueOf("+ "output_string_builder.toString())));\n");
 
 					} else if (AnnotatedElementHelper
 							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
@@ -7028,8 +7017,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 						// short
 						builder.append(
 								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Short.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+										+ "= Short.valueOf((int) Math.round(Double.valueOf("+ "output_string_builder.toString())));\n");
 
 					} else if (AnnotatedElementHelper
 							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
@@ -7038,8 +7026,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 						// int
 						builder.append(
 								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Integer.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+										+ "= Integer.valueOf((int) Math.round(Double.valueOf("+ "output_string_builder.toString())));\n");
 
 					} else if (AnnotatedElementHelper
 							.annotation(action.getDataAnalytics().getPredictionResults().get(0).getTypeRef().getType(),
@@ -7048,8 +7035,7 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 						// long
 						builder.append(
 								ctx.getVariableName(action.getDataAnalytics().getPredictionResults().get(0)).toString()
-										+ "= Long.valueOf((int) Math.round(Double.valueOf("
-										+ "output_string_builder.toString())));\n");
+										+ "= Long.valueOf((int) Math.round(Double.valueOf("+ "output_string_builder.toString())));\n");
 
 					}
 
@@ -7212,5 +7198,391 @@ public class PythonJavaThingActionCompiler extends CommonThingActionCompiler {
 			}
 		}
 	}
+  
+  static void generatePreProcessPlots(StringBuilder pythonScriptStringBuilder,String path_str, DataAnalytics da) {
+      pythonScriptStringBuilder.append("import matplotlib.pyplot as plt\n");
 
+	    pythonScriptStringBuilder.append("plots_path = '" + path_str + "/python-scripts/plots/'\n");
+    	pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_original_df.pickle', 'rb') as pickle_file:\n");
+	    pythonScriptStringBuilder.append("    original_df = pickle.load(pickle_file)\n\n");
+
+      for(Plots plot : da.getPlots()){      
+        switch (plot){
+            case HEAT_MAP:
+            	pythonScriptStringBuilder.append("from seaborn import heatmap\n");
+	            pythonScriptStringBuilder.append("try:\n");
+	            pythonScriptStringBuilder.append("    heatmap(original_df.select_dtypes(include=\"number\").corr())\n");
+	            pythonScriptStringBuilder.append("    plt.savefig(f\"{plots_path}heatmap.png\")\n");
+	            pythonScriptStringBuilder.append("    plt.clf()\n");
+              pythonScriptStringBuilder.append("    print('Heatmap saved')\n");
+	            pythonScriptStringBuilder.append("except:\n");
+	            pythonScriptStringBuilder.append("    print(\"Failed to produce Heatmap\")\n\n");
+	            break;
+            case BOX_PLOT:
+            	pythonScriptStringBuilder.append("from seaborn import boxplot\n");
+	            pythonScriptStringBuilder.append("try:\n");
+	            pythonScriptStringBuilder.append("    nums=original_df.select_dtypes(include=\"number\")\n");
+	            pythonScriptStringBuilder.append("    for num in nums.columns:\n");
+	            pythonScriptStringBuilder.append("        boxplot(x=nums[num],width=0.5,fliersize=5)\n");
+	            pythonScriptStringBuilder.append("        plt.title(f\"Boxplot of {num}\")\n");
+	            pythonScriptStringBuilder.append("        plt.savefig(f\"{plots_path}boxplot_{num}.png\")\n");
+	            pythonScriptStringBuilder.append("        plt.clf()\n");
+              pythonScriptStringBuilder.append("    print('Box plots saved')\n");
+	            pythonScriptStringBuilder.append("except:\n");
+	            pythonScriptStringBuilder.append("    print(\"Failed to produce Boxplot\")\n\n");
+              break;
+            case CLASS_IMBALANCE:
+            	pythonScriptStringBuilder.append("try:\n");
+            	pythonScriptStringBuilder.append("    for series_name, series in original_df.items():\n");
+            	pythonScriptStringBuilder.append("        if series_name in cat_col_names:\n");
+            	pythonScriptStringBuilder.append("            series.value_counts().plot(kind='bar', title=f\"Count {series_name}\")\n");
+              pythonScriptStringBuilder.append("            plt.tight_layout()\n");
+            	pythonScriptStringBuilder.append("            plt.savefig(f\"{plots_path}count_{series_name}.png\")\n");
+            	pythonScriptStringBuilder.append("            plt.close()\n\n\n");
+              pythonScriptStringBuilder.append("    print('Class Imbalance saved')\n");
+
+            	pythonScriptStringBuilder.append("except:\n");
+              pythonScriptStringBuilder.append("    print(f'Failed to produce Class Imbalance')\n");
+              break;
+            case PAIR_PLOT:
+            	pythonScriptStringBuilder.append("import seaborn as sns\n");
+            	pythonScriptStringBuilder.append("try:\n");
+            	pythonScriptStringBuilder.append("    sns.pairplot(df[num_col_names])\n");
+              pythonScriptStringBuilder.append("    plt.tight_layout()\n");
+            	pythonScriptStringBuilder.append("    plt.savefig(f\"{plots_path}pair_plot.png\")\n");
+            	pythonScriptStringBuilder.append("    plt.close()\n");
+              pythonScriptStringBuilder.append("    print('Pair Plot saved')\n");
+            	pythonScriptStringBuilder.append("except:\n");
+              pythonScriptStringBuilder.append("    print(f'Failed to produce Pair Plot')\n");
+              break;
+            default: 
+              break;
+        }
+      }
+    }
+  
+  	static void generateTrainPlotsMetrics(StringBuilder pythonScriptStringBuilder,String path_str, DataAnalytics da) {
+	    pythonScriptStringBuilder.append("import matplotlib.pyplot as plt\n");
+  		pythonScriptStringBuilder.append("import numpy as np\n");
+	    pythonScriptStringBuilder.append("plots_path = '" + path_str + "/python-scripts/plots/'\n");
+    	pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_original_df.pickle', 'rb') as pickle_file:\n");
+	pythonScriptStringBuilder.append("    original_df = pickle.load(pickle_file)\n\n");
+	    pythonScriptStringBuilder.append("from sklearn.preprocessing import LabelEncoder\n");
+	    pythonScriptStringBuilder.append("with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+	    pythonScriptStringBuilder.append("    le = pickle.load(pickle_file)\n\n");
+	    if (da.getLabels() == Labels.ON
+				|| da.getLabels() == Labels.SEMI) {
+			    pythonScriptStringBuilder.append("y_pred = model.predict(X_test)\n");
+			    
+          for(Plots plot : da.getPlots()){      
+            switch (plot){
+                case CONFUSION_MATRIX:
+                		pythonScriptStringBuilder.append("from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay\n");
+		                pythonScriptStringBuilder.append("try:\n");
+		                pythonScriptStringBuilder.append("    confusion_matrix = confusion_matrix(y_test, y_pred)\n");
+		                pythonScriptStringBuilder.append("    cm_display = ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels=le.classes_)\n");
+		                pythonScriptStringBuilder.append("    cm_display.plot()\n");
+		                pythonScriptStringBuilder.append("    plt.savefig(f\"{plots_path}confusion_matrix.png\")\n");
+		                pythonScriptStringBuilder.append("    plt.clf()\n");
+		                pythonScriptStringBuilder.append("    print('Print Confusion Matrix saved')\n");
+		                pythonScriptStringBuilder.append("except:\n");
+		                pythonScriptStringBuilder.append("    print(\"Failed to produce Confusion Matrix\")\n\n");
+		                break;
+                case PRECISION_RECALL:
+                		pythonScriptStringBuilder.append("from sklearn.metrics import precision_recall_curve\n");
+                		pythonScriptStringBuilder.append("from sklearn.preprocessing import label_binarize \n");
+		                pythonScriptStringBuilder.append("if len(le.classes_) == 2:\n");
+		                pythonScriptStringBuilder.append("    try:\n");
+		                if(da.getModelAlgorithm() instanceof LinearClassifierLogisticRegression){
+  		                  pythonScriptStringBuilder.append("        y_scores = model.decision_function(X_test)\n");
+		                } else {
+  		                  pythonScriptStringBuilder.append("        y_scores = model.predict_proba(X_test)[:,1]\n");
+		                }
+		                pythonScriptStringBuilder.append("        precision, recall, thresholds = precision_recall_curve(y_test, y_scores)\n");
+		                pythonScriptStringBuilder.append("        plt.plot(recall, precision)\n");
+		                pythonScriptStringBuilder.append("        plt.xlabel('Recall')\n");
+		                pythonScriptStringBuilder.append("        plt.ylabel('Precision')\n");
+		                pythonScriptStringBuilder.append("        plt.savefig(f\"{plots_path}precision_recall.png\")\n");
+		                pythonScriptStringBuilder.append("        plt.clf()\n");
+		                pythonScriptStringBuilder.append("        print('Precision-Recall saved')\n");
+		                pythonScriptStringBuilder.append("    except:\n");
+		                pythonScriptStringBuilder.append("        print(\"Failed to produce Precision-Recall Graph\")\n\n");
+		                
+		                
+		                pythonScriptStringBuilder.append("else:\n");
+		                pythonScriptStringBuilder.append("    try:\n");
+		                if(da.getModelAlgorithm() instanceof LinearClassifierLogisticRegression){
+  		                  pythonScriptStringBuilder.append("        y_scores = model.decision_function(X_test)\n");
+		                } else {
+  		                  pythonScriptStringBuilder.append("        y_scores = model.predict_proba(X_test)\n");
+		                }
+	                  pythonScriptStringBuilder.append("        y_test_bin = label_binarize(y_test, classes=range(len(le.classes_)))\n");
+	                  pythonScriptStringBuilder.append("        for i, class_label in enumerate(le.classes_):\n");	                  
+	                  pythonScriptStringBuilder.append("            precision, recall, _ = precision_recall_curve(y_test_bin[:, i], y_scores[:, i])\n");
+		                pythonScriptStringBuilder.append("            plt.plot(recall, precision)\n");
+		                pythonScriptStringBuilder.append("            plt.xlabel('Recall')\n");
+		                pythonScriptStringBuilder.append("            plt.ylabel('Precision')\n");
+		                pythonScriptStringBuilder.append("            plt.title(f\"Precision-Recall - {class_label}\")\n");
+		                pythonScriptStringBuilder.append("            plt.savefig(f\"{plots_path}precision_recall_{class_label}.png\")\n");
+		                pythonScriptStringBuilder.append("            plt.clf()\n");
+		                pythonScriptStringBuilder.append("        print('Precision-Recall saved')\n");
+		                pythonScriptStringBuilder.append("    except:\n");
+		                pythonScriptStringBuilder.append("        print(\"Failed to produce Precision-Recall Graph\")\n\n");
+		                break;
+                case LEARNING_CURVE:
+                		pythonScriptStringBuilder.append("from sklearn.model_selection import learning_curve\n");		
+		                pythonScriptStringBuilder.append("try:\n");
+		                pythonScriptStringBuilder.append("    train_size_abs, train_scores, test_scores = learning_curve(model, X_train, y_train, train_sizes=[0.3, 0.6, 0.9])\n");
+		                pythonScriptStringBuilder.append("    plt.figure()\n");
+		                pythonScriptStringBuilder.append("    plt.plot(train_size_abs, train_scores.mean(axis=1), label = 'Training error')\n");
+		                pythonScriptStringBuilder.append("    plt.plot(train_size_abs, test_scores.mean(axis=1), label = 'Test error')\n");
+		                pythonScriptStringBuilder.append("    plt.xlabel('Training set size')\n");
+		                pythonScriptStringBuilder.append("    plt.ylabel('Score')\n");
+		                pythonScriptStringBuilder.append("    plt.legend()\n");
+		                pythonScriptStringBuilder.append("    plt.savefig(f\"{plots_path}learning_curve.png\")\n");
+		                pythonScriptStringBuilder.append("    plt.clf()\n");
+		                pythonScriptStringBuilder.append("    print(\"Learning Curve Saved\")\n\n");
+		                pythonScriptStringBuilder.append("except:\n");
+		                pythonScriptStringBuilder.append("    print(\"Failed to produce Learning Curve\")\n\n");
+		                break;
+		            case ROC_CURVE:
+		            		pythonScriptStringBuilder.append("from sklearn.metrics import roc_curve, auc\n");
+		                pythonScriptStringBuilder.append("if len(le.classes_) <= 2:\n");
+		                pythonScriptStringBuilder.append("    try:\n");
+		                if(da.getModelAlgorithm() instanceof LinearClassifierLogisticRegression){
+  		                  pythonScriptStringBuilder.append("        y_proba = model.decision_function(X_test)\n");
+		                } else {
+  		                  pythonScriptStringBuilder.append("        y_proba = model.predict_proba(X_test)[:,1]\n");
+		                }
+		                pythonScriptStringBuilder.append("        fpr, tpr, thresholds = roc_curve(y_test, y_proba)\n");
+		                pythonScriptStringBuilder.append("        roc_auc = auc(fpr, tpr)\n");
+		                pythonScriptStringBuilder.append("        plt.plot(fpr, tpr, label='ROC curve')\n");
+		                pythonScriptStringBuilder.append("        plt.plot([0, 1], [0, 1], 'k--', label='No Skill')\n");
+		                pythonScriptStringBuilder.append("        plt.xlim([0.0, 1.0])\n");
+		                pythonScriptStringBuilder.append("        plt.ylim([0.0, 1.05])\n");
+		                pythonScriptStringBuilder.append("        plt.xlabel(\'False Positive Rate\')\n");
+		                pythonScriptStringBuilder.append("        plt.ylabel(\'True Positive Rate\')\n");
+		                pythonScriptStringBuilder.append("        plt.title(\'ROC\')\n");	
+		                pythonScriptStringBuilder.append("        plt.legend(loc=\"lower right\")\n");
+		                pythonScriptStringBuilder.append("        plt.savefig(f\"{plots_path}ROC.png\")\n");	
+                    pythonScriptStringBuilder.append("        print(\"ROC-Curve Saved\")\n\n");
+		                pythonScriptStringBuilder.append("    except:\n");
+		                pythonScriptStringBuilder.append("        print(\"Failed to produce ROC-Curve\")\n\n");
+		                pythonScriptStringBuilder.append("else:\n");
+		                pythonScriptStringBuilder.append("    from sklearn.preprocessing import label_binarize \n");
+		                pythonScriptStringBuilder.append("    try:\n");
+		                if(da.getModelAlgorithm() instanceof LinearClassifierLogisticRegression){
+  		                  pythonScriptStringBuilder.append("        y_proba = model.decision_function(X_test)\n");
+		                } else {
+  		                  pythonScriptStringBuilder.append("        y_proba = model.predict_proba(X_test)[:,1]\n");
+		                }
+		                pythonScriptStringBuilder.append("        y_test_binarized = label_binarize(y_test, classes=np.unique(y_test))\n");
+		                pythonScriptStringBuilder.append("        fpr = dict()\n");
+		                pythonScriptStringBuilder.append("        tpr = dict()\n");
+		                pythonScriptStringBuilder.append("        roc_auc = dict()\n");
+		                pythonScriptStringBuilder.append("        for i in range(len(le.classes_)):\n");
+		                pythonScriptStringBuilder.append("            fpr[i], tpr[i], _ = roc_curve(y_test_binarized[:, i], y_proba[:, i])\n");
+		                pythonScriptStringBuilder.append("            roc_auc[i] = auc(fpr[i], tpr[i])\n");
+		                pythonScriptStringBuilder.append("            plt.plot(fpr[i], tpr[i], linestyle=\'--\', label=f'{le.classes_[i]} vs Rest AUC ={roc_auc[i]}')\n\n");
+		                pythonScriptStringBuilder.append("        plt.plot([0, 1], [0, 1], 'b--')\n");
+		                pythonScriptStringBuilder.append("        plt.xlim([0.0, 1.0])\n");
+		                pythonScriptStringBuilder.append("        plt.ylim([0.0, 1.05])\n");
+		                pythonScriptStringBuilder.append("        plt.xlabel(\'False Positive Rate\')\n");
+		                pythonScriptStringBuilder.append("        plt.ylabel(\'True Positive Rate\')\n");
+		                pythonScriptStringBuilder.append("        plt.title(\'ROC\')\n");	
+		                pythonScriptStringBuilder.append("        plt.legend(loc=\"lower right\")\n");
+		                pythonScriptStringBuilder.append("        plt.savefig(f\"{plots_path}ROC.png\")\n");	
+		                pythonScriptStringBuilder.append("        print(\"ROC-Curve Saved\")\n\n");
+		                pythonScriptStringBuilder.append("    except:\n");
+		                pythonScriptStringBuilder.append("        print(\"Failed to produce ROC-Curve\")\n\n");
+		                break;
+                default: 
+                  break;
+            }
+          }
+			} else {
+		      DataAnalyticsModelAlgorithm dataAnalyticsModelAlgorithm = da.getModelAlgorithm();
+			    if (da.getPlots().contains(Plots.CLUSTERING)) {
+		      	if (dataAnalyticsModelAlgorithm instanceof KMeans || dataAnalyticsModelAlgorithm instanceof MiniBatchKMeans) {
+      		    pythonScriptStringBuilder.append("try:\n");
+		          pythonScriptStringBuilder.append(
+		              "		plt.figure()\n" +
+		              "		plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, s=50, cmap='Tab10')\n" +
+		              "		centers = model.cluster_centers_\n" +
+		              "		plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200,marker='o')\n"+
+		              "		plt.title('Clustering Visualization')\n" +
+		              "		plt.savefig(plots_path + 'kmeans_clustering.png')\n" +
+		              "		plt.clf()\n\n"
+		          );
+		          pythonScriptStringBuilder.append(
+                  "except:\n" +
+                  "		print(\"Error Creating KMeans clustering plot\")\n\n"
+		          );
+	          } else if (dataAnalyticsModelAlgorithm instanceof DBSCAN) {
+      		    pythonScriptStringBuilder.append("try:\n");
+		          pythonScriptStringBuilder.append(
+		              "		labels = model.labels_\n" +
+		              "		n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)\n" +
+		              "		unique_labels = set(labels)\n" +
+		              "		colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]\n" +
+		              "		plt.figure()\n" +
+		              "		for k, col in zip(unique_labels, colors):\n" +
+		              "				if k == -1:\n" +
+		              "						col = [0, 0, 0, 1]\n" +
+		              "				class_member_mask = (labels == k)\n" +
+		              "				xy = X[class_member_mask]\n" +
+		              "				plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),markeredgecolor='k', markersize=6)\n\n" +
+		              "		plt.title('DBSCAN Clustering Visualization')\n" +
+		              "		plt.savefig(plots_path + 'dbscan_clustering.png')\n" +
+		              "		plt.clf()\n\n"
+		          );
+		          pythonScriptStringBuilder.append(
+                  "except:\n" +
+                  "		print(\"Error Creating DBSCAN plot\")\n\n"
+		          );
+	          } else if (dataAnalyticsModelAlgorithm instanceof SpectralClustering) {
+      		    pythonScriptStringBuilder.append("try:\n");
+		          pythonScriptStringBuilder.append(
+		              "		plt.figure()\n" +
+		              "		plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, s=50, cmap='Tab10')\n" +
+		              "		plt.title('Spectral Clustering Visualization')\n" +
+		              "		plt.savefig(plots_path + 'spectral_clustering.png')\n" +
+		              "		plt.clf()\n\n"
+		          );
+		          pythonScriptStringBuilder.append(
+                  "except:\n" +
+                  "		print(\"Error Creating SpectralClustering clustering plot\")\n\n"
+		          );
+	          } else if (dataAnalyticsModelAlgorithm instanceof GaussianMixture) {
+      		    pythonScriptStringBuilder.append("try:\n");
+		          pythonScriptStringBuilder.append(
+		              "		plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, s=50, cmap='Tab10')\n" +
+		              "		centers = model.means_\n" +
+		              "		plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, marker='o')\n" +
+		              "		plt.figure()\n" +
+		              "		plt.title('Gaussian Mixture Clustering Visualization')\n" +
+		              "		plt.savefig(plots_path + 'kmeans_clustering.png')\n" +
+		              "		plt.clf()\n\n"
+		          );
+		          pythonScriptStringBuilder.append(
+                  "except:\n" +
+                  "		print(\"Error Creating GaussianMixture clustering plot\")\n\n"
+		          );
+            }
+	      }
+			}
+    }
+    
+private void generateDAReport(StringBuilder pythonScriptStringBuilder, String path_str, DataAnalytics da) {
+	  pythonScriptStringBuilder.append("plots_path = '" + path_str + "/python-scripts/plots/'\n");
+
+		pythonScriptStringBuilder.append("import numpy as np\n");
+		pythonScriptStringBuilder.append("import pickle\n");
+		
+		pythonScriptStringBuilder.append("with open(r'" + path_str + "/python-scripts/pickles/preprocess_original_df.pickle','rb') as f:\n");
+	  pythonScriptStringBuilder.append("    original_df = pickle.load(f)\n\n");
+		
+		pythonScriptStringBuilder.append("html = f\'\'\'\n<html>\n<head>\n<title> Data Analytics Report </title>\n</head>\n<body>\n<h1>Data Analytics Report</h1>\n\'\'\'\n");
+
+		if (da.getLabels() == Labels.ON) {
+			pythonScriptStringBuilder.append("learning_type = \"Supervised\"\n");
+		} else if (da.getLabels() == Labels.SEMI) {
+			pythonScriptStringBuilder.append("learning_type = \"Semi-supervised\"\n");
+		} else {
+			pythonScriptStringBuilder.append("learning_type = \"Unsupervised\"\n");
+		}
+		
+		pythonScriptStringBuilder.append("model_type = \"" + da.getModelAlgorithm().eClass().getName().toString() +"\"\n");
+				
+		pythonScriptStringBuilder.append("model_name = \"" + da.getModelAlgorithm().getName() +"\"\n");
+		
+		pythonScriptStringBuilder.append("library = \"" + 	da.getAnnotations().get(0).getValue() +"\"\n");
+		
+		pythonScriptStringBuilder.append("html += f\'\'\'<h2>Model Information </h2>\n<p>Model Type: {model_type} </p>\n<p>Learning Type: {learning_type} </p>\n<p>Model Name: {model_name}</p>\n<p>Library: {library}</p>\\n <h3>Model Parameters</h3>\\n<table>\\n<tr>\\n<th>Parameter</th>\\n<th>Value</th>\\n</tr>\\n{\"\".join(\"<tr><td>\" + str(key) + \"</td>\" + \"<td>\" + str(value) + \"</td></tr>\" for key, value in model.get_params().items())}\n</table>\n \'\'\'\n");
+		
+		pythonScriptStringBuilder.append("features = X_train.columns.values.tolist() \n");
+		pythonScriptStringBuilder.append("features.append(y_train.name) \n");
+
+		pythonScriptStringBuilder.append("feature_types = list(X_train.dtypes.map(lambda x : x.name))\n");
+		pythonScriptStringBuilder.append("feature_types.append(y_train.dtype) \n");
+		pythonScriptStringBuilder.append("data_size = original_df[original_df.columns[0]].count()\n");
+		
+		pythonScriptStringBuilder.append("dataset_location = \"" + da.getDataset() +"\"\n");
+		pythonScriptStringBuilder.append("training_results_location = \"" + da.getTrainingResults() +"\"\n");
+		pythonScriptStringBuilder.append("html += f\'\'\'\n<h2>Data Information</h2><p>Dataset Size: {data_size} </p>\n<p>Dataset Location: {dataset_location}</p>\n <p>Training Results Location: {training_results_location} </p>\n <p>Target Features:" + da.getPredictionResults().stream().map(Property::getName).collect(Collectors.joining(",")) +  "</p>\n <h3>Features</h3>\n<table>\n<tr>\n<th>Feature</th>\n<th>Type</th>\n</tr>\n{\"\".join(\"<tr><td>\" + str(feature) + \"</td>\" + \"<td>\" + str(type) + \"</td></tr>\" for feature, type in zip(features,feature_types))}\n</table>\n<h2>Performance Metrics</h2>\n\'\'\'\n");
+
+		EList<Metrics> metrics = da.getMetrics();
+		for (Metrics metric : metrics) {
+			pythonScriptStringBuilder.append("try:\n");
+			switch (metric) {
+				case RMSE:
+					pythonScriptStringBuilder.append("	RMSE = np.sqrt(((y_pred - y_test) ** 2).mean())\n");
+					pythonScriptStringBuilder.append("	html += f\'\'\'<p>RMSE: {RMSE}</p>\n\'\'\'\n");
+					break;
+				case MAE:
+					pythonScriptStringBuilder.append("	from sklearn.metrics import mean_absolute_error as mae\n");
+					pythonScriptStringBuilder.append("	MAE = mae(y_test, y_pred)\n");
+					pythonScriptStringBuilder.append("	html += f\'\'\'<p>MAE: {MAE}</p>\n\'\'\'\n");
+					break;
+				case MSE:
+					pythonScriptStringBuilder.append("	MSE = np.square(np.subtract(y_test, y_pred)).mean()\n");
+					pythonScriptStringBuilder.append("	html += f\'\'\'<p>MSE: {MSE}</p>\n\'\'\'\n");
+					break;
+				case R2:
+					pythonScriptStringBuilder.append("	from sklearn.metrics import r2_score\n");
+					pythonScriptStringBuilder.append("	R2 = r2_score(y_test, y_pred)\n");
+					pythonScriptStringBuilder.append("	html += f\'\'\'<p>R-Squared: {R2}</p>\n\'\'\'\n");
+					break;
+				case ACCURACY:
+					pythonScriptStringBuilder.append("	from sklearn.metrics import accuracy_score\n");
+					pythonScriptStringBuilder.append("	accuracy = accuracy_score(y_test, y_pred)\n");
+					pythonScriptStringBuilder.append("	html += f\'\'\'<p>Accuracy: {accuracy}</p>\n \'\'\'\n");
+					break;
+				case PRECISION:
+          pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+          pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+          pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+          
+					pythonScriptStringBuilder.append("	from sklearn.metrics import classification_report\n");
+					pythonScriptStringBuilder.append("	classif = classification_report(le.inverse_transform(y_test), le.inverse_transform(y_pred), output_dict=True)\n");
+					pythonScriptStringBuilder.append("	for key, value in classif.items():\n");
+					pythonScriptStringBuilder.append("		if key != 'accuracy' and key != 'macro avg' and key != 'weighted avg':\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>Class: {str(key)}</p>\n \'\'\'\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>Precision: {value[\'precision\']}</p>\n \'\'\'\n");
+					break;
+				case RECALL:
+          pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+          pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+          pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+          
+					pythonScriptStringBuilder.append("	from sklearn.metrics import classification_report\n");
+					pythonScriptStringBuilder.append("	classif = classification_report(le.inverse_transform(y_test), le.inverse_transform(y_pred), output_dict=True)\n");
+					pythonScriptStringBuilder.append("	for key, value in classif.items():\n");
+					pythonScriptStringBuilder.append("		if key != 'accuracy' and key != 'macro avg' and key != 'weighted avg':\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>Class: {str(key)}</p>\n \'\'\'\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>Recall: {value[\'recall\']}</p>\n \'\'\'\n");
+					break;
+				case F1_SCORE:
+          pythonScriptStringBuilder.append("	from sklearn.preprocessing import LabelEncoder\n");
+          pythonScriptStringBuilder.append("	with open('" + path_str + "/python-scripts/pickles/"+ "preprocess_label_encoder.pickle', 'rb') as pickle_file:\n");
+          pythonScriptStringBuilder.append("		le = pickle.load(pickle_file)\n\n");
+          
+					pythonScriptStringBuilder.append("	from sklearn.metrics import classification_report\n");
+					pythonScriptStringBuilder.append("	classif = classification_report(le.inverse_transform(y_test), le.inverse_transform(y_pred), output_dict=True)\n");
+					pythonScriptStringBuilder.append("	for key, value in classif.items():\n");
+					pythonScriptStringBuilder.append("		if key != 'accuracy' and key != 'macro avg' and key != 'weighted avg':\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>Class: {str(key)}</p>\n \'\'\'\n");
+					pythonScriptStringBuilder.append("			html += f\'\'\'<p>F1-Score: {value[\'f1-score\']}</p>\n \'\'\'\n\n\n");
+					break;
+				default:
+		            break;
+				}
+			pythonScriptStringBuilder.append("except:\n");
+			pythonScriptStringBuilder.append("	print(\"Failed to produce metric: " + metric + "\")\n\n");
+		}
+		pythonScriptStringBuilder.append("html += f\'\'\'</body>\n</html>\n\'\'\'\n");
+		pythonScriptStringBuilder.append("with open(plots_path + 'html_report.html', 'w') as f:\n");
+		pythonScriptStringBuilder.append("	f.write(html)\n");
+		pythonScriptStringBuilder.append("	f.close()\n\n");
+	}    
 }
